@@ -75,7 +75,8 @@ plugins=(
 	zsh-autosuggestions
 	zsh-syntax-highlighting
 	zsh-z
-	)
+  poetry
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -105,7 +106,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias v="lvim"
+alias python="python3"
 alias git-log="git log --graph --abbrev-commit --decorate  --first-parent"
 
 alias ls='exa --icons'
@@ -115,19 +116,15 @@ alias lt='ll --git-ignore -T --level=2'
 alias ltt='lt -T --level=3'
 alias lttt='ltt -T --level=4'
 
-export PATH="$HOME/.cargo/bin:$PATH"
-
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
-export PATH="$PATH:$JAVA_HOME/bin:$PATH"
-
 eval "$(starship init zsh)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="$HOME/.poetry/bin:$PATH"
+export PRISMA_QUERY_ENGINE_BINARY=/custom/my-query-engine-unix
+
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/bin/java 
+export ANDROID_HOME=/root/Android/Sdk
+
