@@ -75,7 +75,7 @@ plugins=(
 	zsh-autosuggestions
 	zsh-syntax-highlighting
 	zsh-z
-  	poetry
+  poetry
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -117,8 +117,13 @@ alias lt='ll --git-ignore -T --level=2'
 alias ltt='lt -T --level=3'
 alias lttt='ltt -T --level=4'
 
+alias DL='/mnt/c/Users/dellb/Downloads'
+
 eval "$(starship init zsh)"
+
+export PATH="/home/glendell03/.local/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+

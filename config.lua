@@ -7,6 +7,7 @@ a global executable or a path to
 an executable
 ]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
+
 local macchiato = require("catppuccin.palettes").get_palette "macchiato"
 
 -- general
@@ -17,11 +18,13 @@ vim.g.catppuccin_flavour = "macchiato"
 lvim.transparent_window = true
 lvim.lsp.diagnostics.virtual_text = false
 lvim.builtin.lualine.options.disabled_filetypes = { "NvimTree", "minimap" }
-lvim.builtin.alpha.active = false
--- lvim.builtin.treesitter.rainbow.enable = true
+lvim.builtin.notify.active = false
+vim.wo.relativenumber = true
+-- to disable icons and use a minimalist setup, uncomment the following
+-- lvim.use_icons = false
 
 -- minimap
-vim.g.minimap_auto_start = 1
+-- vim.g.minimap_auto_start = 1
 vim.g.minimap_highlight_search = 1
 vim.g.minimap_git_colors = 1
 -- vim.g.minimap_block_buftypes = { "alpha" }
@@ -31,14 +34,13 @@ vim.g.gitblame_message_template = '     <author> • <date> • <summary>    '
 vim.g.gitblame_date_format = "%a %x"
 vim.g.gitblame_ignored_filetypes = { "NvimTree" }
 
--- to disable icons and use a minimalist setup, uncomment the following
--- lvim.use_icons = false
-
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<C-x>"] = ":MinimapToggle<cr>"
+lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
@@ -71,7 +73,7 @@ lvim.builtin.which_key.mappings["t"] = {
   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
-  w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
+  w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
   t = { "<cmd>TodoTrouble<cr>", "Todo Trouble" }
 }
 
@@ -83,7 +85,6 @@ lvim.builtin.which_key.mappings["v"] = {
   f = { "<cmd>DiffviewFocusFiles<cr>", "Focus Files" },
   r = { "<cmd>DiffviewRefresh<cr>", "Refresh" }
 }
-
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
@@ -129,7 +130,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- }
 
 -- ---@usage disable automatic installation of servers
--- lvim.lsp.automatic_servers_installation = false
+-- lvim.lsp.installer.setup.automatic_installation = false
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
@@ -160,16 +161,13 @@ formatters.setup {
   --   { command = "isort", filetypes = { "python" } },
   {
     --     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
-    command = "prettier",
+    command = "prettierd",
     --     ---@usage arguments to pass to the formatter
     --     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
     --     extra_args = { "--print-with", "100" },
     --     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
     filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "tsx", "jsx" },
   },
-  -- {
-  --   command = "prismaFmt",
-  -- }
 }
 
 -- -- set additional linters
@@ -177,7 +175,7 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   { command = "flake8", filetypes = { "python" } },
   {
-    command = "eslint",
+    command = "eslint_d",
     filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "tsx", "jsx" },
   }
   --   {
@@ -196,7 +194,6 @@ linters.setup {
 
 -- Additional Plugins
 lvim.plugins = {
-  { "folke/tokyonight.nvim" },
   { "catppuccin/nvim", as = "catppuccin",
     require("catppuccin").setup({
       -- transparent_background = true,
@@ -238,20 +235,11 @@ lvim.plugins = {
     "lukas-reineke/indent-blankline.nvim",
     event = "BufRead",
     config = function()
-      vim.opt.termguicolors = true
-
-      vim.cmd [[highlight IndentBlanklineIndent1 guifg=#ed8796 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent2 guifg=#eed49f gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent3 guifg=#a6da95 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent4 guifg=#7dc4e4 gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent5 guifg=#f5a97f gui=nocombine]]
-      vim.cmd [[highlight IndentBlanklineIndent6 guifg=#c6a0f6 gui=nocombine]]
-
       vim.opt.list = true
       vim.opt.listchars:append "space:⋅"
       -- vim.opt.listchars:append "eol:↴"
       local opts = {
-        -- char = "▏",
+        --     -- char = "▏",
         filetype_exclude = {
           "alpha",
           "help",
@@ -265,20 +253,10 @@ lvim.plugins = {
         bufname_exclude = { "config.lua" },
 
         show_trailing_blankline_indent = false,
-        show_first_indent_level = true,
-        -- show_current_context = true,
-        -- show_current_context_start = true,
-
+        show_first_indent_level = false,
         space_char_blankline = " ",
-        char_highlight_list = {
-          "IndentBlanklineIndent1",
-          "IndentBlanklineIndent2",
-          "IndentBlanklineIndent3",
-          "IndentBlanklineIndent4",
-          "IndentBlanklineIndent5",
-          "IndentBlanklineIndent6",
-        },
-        -- use_treesitter = false,
+        show_current_context = true,
+        show_current_context_start = true,
       }
 
       require("indent_blankline").setup(opts)
@@ -292,12 +270,7 @@ lvim.plugins = {
       require("todo-comments").setup()
     end,
   },
-  -- {
-  --   "p00f/nvim-ts-rainbow",
-  -- },
-  -- { "williamboman/mason.nvim",
-  --   require("mason").setup()
-  -- }
+
 }
 
 if vim.fn.has "wsl" == 1 then
@@ -312,7 +285,6 @@ if vim.fn.has "wsl" == 1 then
     },
   }
 end
-
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("BufEnter", {
