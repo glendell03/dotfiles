@@ -7,7 +7,6 @@ a global executable or a path to
 an executable
 ]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
-
 local macchiato = require("catppuccin.palettes").get_palette "macchiato"
 
 -- general
@@ -24,15 +23,21 @@ vim.wo.relativenumber = true
 -- lvim.use_icons = false
 
 -- minimap
--- vim.g.minimap_auto_start = 1
+vim.g.minimap_auto_start = 1
 vim.g.minimap_highlight_search = 1
 vim.g.minimap_git_colors = 1
--- vim.g.minimap_block_buftypes = { "alpha" }
+vim.g.minimap_close_filetypes = { "alpha" }
 
 --git blame
-vim.g.gitblame_message_template = '     <author> • <date> • <summary>    '
+vim.g.gitblame_message_template = '<author> • <date> • <summary>'
 vim.g.gitblame_date_format = "%a %x"
 vim.g.gitblame_ignored_filetypes = { "NvimTree" }
+vim.g.gitblame_display_virtual_text = 0
+local git_blame = require('gitblame')
+local components = require("lvim.core.lualine.components")
+lvim.builtin.lualine.sections.lualine_c = { components.diff, components.python_env,
+  { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } }
+lvim.builtin.lualine.sections.lualine_b = { components.filename }
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -85,6 +90,7 @@ lvim.builtin.which_key.mappings["v"] = {
   f = { "<cmd>DiffviewFocusFiles<cr>", "Focus Files" },
   r = { "<cmd>DiffviewRefresh<cr>", "Refresh" }
 }
+
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
@@ -196,12 +202,18 @@ linters.setup {
 lvim.plugins = {
   { "catppuccin/nvim", as = "catppuccin",
     require("catppuccin").setup({
-      -- transparent_background = true,
+      transparent_background = true,
       color_overrides = {
         all = {
           lavender = macchiato.flamingo,
         }
       },
+      highlight_overrides = {
+        all = {
+          VertSplit = { fg = macchiato.base },
+          CursorLine = { bg = macchiato.mantle },
+        }
+      }
     })
   },
   {
@@ -214,6 +226,7 @@ lvim.plugins = {
   {
     "windwp/nvim-ts-autotag",
     require("nvim-ts-autotag").setup()
+
   },
   {
     "norcalli/nvim-colorizer.lua",
@@ -221,10 +234,12 @@ lvim.plugins = {
       require("colorizer").setup({ "css", "scss", "html", "javascript", "javascriptreact", "typescript",
         "typescriptreact", "tsx", "jsx" },
         {
+
           RGB = true, -- #RGB hex codes
           RRGGBB = true, -- #RRGGBB hex codes
           RRGGBBAA = true, -- #RRGGBBAA hex codes
           rgb_fn = true, -- CSS rgb() and rgba() functions
+
           hsl_fn = true, -- CSS hsl() and hsla() functions
           css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
           css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
@@ -232,11 +247,13 @@ lvim.plugins = {
     end,
   },
   {
+
     "lukas-reineke/indent-blankline.nvim",
     event = "BufRead",
     config = function()
+
       vim.opt.list = true
-      vim.opt.listchars:append "space:⋅"
+      -- vim.opt.listchars:append "space:⋅"
       -- vim.opt.listchars:append "eol:↴"
       local opts = {
         --     -- char = "▏",
@@ -265,11 +282,24 @@ lvim.plugins = {
   {
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",
+
     event = "BufRead",
     config = function()
       require("todo-comments").setup()
     end,
   },
+  { 'karb94/neoscroll.nvim',
+    require('neoscroll').setup()
+  },
+  { "romgrk/nvim-treesitter-context",
+    config = function()
+      require("treesitter-context").setup {
+        enable = true,
+        throttle = true,
+        max_lines = 0,
+      }
+    end
+  }
 
 }
 
