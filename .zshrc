@@ -110,20 +110,52 @@ alias python="python3"
 alias git-log="git log --graph --abbrev-commit --decorate  --first-parent"
 
 alias ls='exa --icons'
-alias lt='ll --git-ignore -T --level=2'  
 alias ll='ls -l --grid --git -@ --no-user --group-directories-first'
 alias la='ll -a'
 alias lt='ll --git-ignore -T --level=2'
 alias ltt='lt -T --level=3'
 alias lttt='ltt -T --level=4'
 
+# alias neovide='neovide.exe --wsl --multigrid'
+alias v='nvim'
+
 alias DL='/mnt/c/Users/dellb/Downloads'
+# alias explorer="/mnt/c/Windows/explorer.exe"
+# alias code="/mnt/c/Users/dellb/AppData/Local/Programs/'Microsoft VS Code'/bin/code"
 
 eval "$(starship init zsh)"
 
 export PATH="/home/glendell03/.local/bin:$PATH"
+export PATH="/home/glendell03/.local/share/neovim/bin:$PATH"
+export DENO_INSTALL="/home/glendell03/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+fm6000 -r -de WSL2 -c "random" -g 10
+alias clear='clear && fm6000 -r -de WSL2 -c "random" -g 10'
+
+
+lg()
+{
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+
+    lazygit "$@"
+
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
+
+eval "$(direnv hook zsh)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+
+# bun completions
+[ -s "/home/glendell03/.bun/_bun" ] && source "/home/glendell03/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

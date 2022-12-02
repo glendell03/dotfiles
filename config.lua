@@ -7,7 +7,6 @@ a global executable or a path to
 an executable
 ]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
-local macchiato = require("catppuccin.palettes").get_palette "macchiato"
 
 -- general
 lvim.log.level = "warn"
@@ -15,37 +14,42 @@ lvim.format_on_save = true
 lvim.colorscheme = "catppuccin"
 vim.g.catppuccin_flavour = "macchiato"
 lvim.transparent_window = true
-lvim.lsp.diagnostics.virtual_text = false
-lvim.builtin.lualine.options.disabled_filetypes = { "NvimTree", "minimap" }
-lvim.builtin.notify.active = false
+-- lvim.lsp.diagnostics.virtual_text = false
+lvim.builtin.lualine.options.disabled_filetypes = { "NvimTree", "minimap", 'alpha' }
 vim.wo.relativenumber = true
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
 -- minimap
-vim.g.minimap_auto_start = 1
+vim.g.minimap_auto_start = 0
 vim.g.minimap_highlight_search = 1
 vim.g.minimap_git_colors = 1
 vim.g.minimap_close_filetypes = { "alpha" }
+vim.g.minimap_block_filetypes = { "NvimTree" }
 
 --git blame
-vim.g.gitblame_message_template = '<author> • <date> • <summary>'
+vim.g.gitblame_enabled = 0
+vim.g.gitblame_message_template = '    <author> • <date> • <summary>    '
 vim.g.gitblame_date_format = "%a %x"
 vim.g.gitblame_ignored_filetypes = { "NvimTree" }
-vim.g.gitblame_display_virtual_text = 0
-local git_blame = require('gitblame')
-local components = require("lvim.core.lualine.components")
-lvim.builtin.lualine.sections.lualine_c = { components.diff, components.python_env,
-  { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } }
-lvim.builtin.lualine.sections.lualine_b = { components.filename }
+-- vim.g.gitblame_display_virtual_text = 0
+-- local git_blame = require('gitblame')
+-- local components = require("lvim.core.lualine.components")
+
+-- lvim.builtin.lualine.sections.lualine_c = { components.diff, components.python_env,
+-- { git_blame.get_current_blame_text, cond = git_blame.is_blame_text_available } }
+-- lvim.builtin.lualine.sections.lualine_b = { components.filename }
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<C-x>"] = ":MinimapToggle<cr>"
-lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
-lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<C-g>"] = ":GitBlameToggle<cr>"
+lvim.keys.normal_mode["<Tab>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-Tab>"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["<S-Up>"] = ":m-2<CR>"
+lvim.keys.normal_mode["<S-Down>"] = ":m+<CR>"
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
@@ -95,7 +99,6 @@ lvim.builtin.which_key.mappings["v"] = {
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
@@ -197,6 +200,8 @@ linters.setup {
   --     filetypes = { "javascript", "python" },
   --   },
 }
+local macchiato = require("catppuccin.palettes").get_palette "macchiato"
+local ucolors = require "catppuccin.utils.colors"
 
 -- Additional Plugins
 lvim.plugins = {
@@ -212,6 +217,17 @@ lvim.plugins = {
         all = {
           VertSplit = { fg = macchiato.base },
           CursorLine = { bg = macchiato.mantle },
+          DiagnosticVirtualTextError = { bg = ucolors.darken(macchiato.red, 0.3) },
+          DiagnosticVirtualTextWarn = { bg = ucolors.darken(macchiato.yellow, 0.3) },
+          DiagnosticVirtualTextInfo = { bg = ucolors.darken(macchiato.blue, 0.3) },
+          DiagnosticVirtualTextHint = { bg = ucolors.darken(macchiato.teal, 0.3) }
+        }
+      },
+
+      integrations = {
+        indent_blankline = {
+          enabled = true,
+          colored_indent_levels = false
         }
       }
     })
@@ -246,39 +262,39 @@ lvim.plugins = {
         })
     end,
   },
-  {
+  -- {
 
-    "lukas-reineke/indent-blankline.nvim",
-    event = "BufRead",
-    config = function()
+  --   "lukas-reineke/indent-blankline.nvim",
+  --   event = "BufRead",
+  --   config = function()
 
-      vim.opt.list = true
-      -- vim.opt.listchars:append "space:⋅"
-      -- vim.opt.listchars:append "eol:↴"
-      local opts = {
-        --     -- char = "▏",
-        filetype_exclude = {
-          "alpha",
-          "help",
-          "terminal",
-          "dashboard",
-          "lspinfo",
-          "lsp-installer",
-          "mason",
-        },
-        buftype_exclude = { "terminal" },
-        bufname_exclude = { "config.lua" },
+  --     vim.opt.list = true
+  --     -- vim.opt.listchars:append "space:⋅"
+  --     -- vim.opt.listchars:append "eol:↴"
+  --     local opts = {
+  --       --     -- char = "▏",
+  --       filetype_exclude = {
+  --         "alpha",
+  --         "help",
+  --         "terminal",
+  --         "dashboard",
+  --         "lspinfo",
+  --         "lsp-installer",
+  --         "mason",
+  --       },
+  --       buftype_exclude = { "terminal" },
+  --       bufname_exclude = { "config.lua" },
 
-        show_trailing_blankline_indent = false,
-        show_first_indent_level = false,
-        space_char_blankline = " ",
-        show_current_context = true,
-        show_current_context_start = true,
-      }
+  --       show_trailing_blankline_indent = false,
+  --       show_first_indent_level = false,
+  --       space_char_blankline = " ",
+  --       show_current_context = true,
+  --       show_current_context_start = true,
+  --     }
 
-      require("indent_blankline").setup(opts)
-    end
-  },
+  --     require("indent_blankline").setup(opts)
+  --   end
+  -- },
   {
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",
@@ -299,7 +315,8 @@ lvim.plugins = {
         max_lines = 0,
       }
     end
-  }
+  },
+  { 'mg979/vim-visual-multi' }
 
 }
 
@@ -329,3 +346,8 @@ end
 --     require("nvim-treesitter.highlight").attach(0, "bash")
 --   end,
 -- })
+--
+vim.api.nvim_create_autocmd('BufRead', {
+  pattern = { "/home/glendell03/betterteem/betterteem-web/**.js" },
+  command = "set shiftwidth=4"
+})

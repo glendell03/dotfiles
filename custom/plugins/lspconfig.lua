@@ -3,8 +3,7 @@ local on_attach = require("plugins.configs.lspconfig").on_attach
 local capabilities = require("plugins.configs.lspconfig").capabilities
 
 local lspconfig = require "lspconfig"
-local servers =
-  { "html", "cssls", "clangd", "tsserver", "tailwindcss", "cssmodules_ls", "eslint", "graphql", "jsonls", "prismals" }
+local servers = { "html", "cssls", "clangd", "prismals", "tsserver", "eslint", "jsonls", "tailwindcss", "yamlls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -12,20 +11,3 @@ for _, lsp in ipairs(servers) do
     capabilities = capabilities,
   }
 end
-
-lspconfig.tailwindcss.setup{
-  settings = {
-    tailwindCSS = {
-      experimental = {
-        classRegex = {
-          "tw`([^`]*)", -- tw`...`
-          "tw=\"([^\"]*)", -- <div tw="..." />
-          "tw={\"([^\"}]*)", -- <div tw={"..."} />
-
-          "tw\\.\\w+`([^`]*)", -- tw.xxx`...`
-          "tw\\(.*?\\)`([^`]*)"
-        }
-      }
-    }
-  }
-}

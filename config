@@ -1,5 +1,11 @@
 # Main Acc
 Host github.com-main github account
-  HostName github.com
-  User git
-  IdentityFile ~/.ssh/id_rsa_main
+ HostName github.com
+ User git
+ IdentityFile ~/.ssh/id_rsa_main
+
+# Betterteem
+Host github.com-bt github account
+ HostName github.com
+ User git
+ IdentityFile ~/.ssh/id_rsa_bt
