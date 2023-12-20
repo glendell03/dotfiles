@@ -8,6 +8,18 @@ M.disabled = {
   },
 }
 
+M.yank = {
+  n = {
+    ["<leader>y"] = { '"+y' },
+  },
+}
+
+M.delete = {
+  n = {
+    ["<leader>d"] = { '"_d' },
+  },
+}
+
 M.general = {
   n = {
     [";"] = { ":", "enter command mode", opts = { nowait = true } },
