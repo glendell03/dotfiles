@@ -12,9 +12,10 @@ local servers = {
   "rust_analyzer",
   "pyright",
   "prismals",
-  "denols",
+  -- "denols",
   "biome",
-  "eslint",
+  "jsonls",
+  "tailwindcss",
 }
 
 for _, lsp in ipairs(servers) do
@@ -24,17 +25,17 @@ for _, lsp in ipairs(servers) do
   }
 end
 
-lspconfig.denols.setup {
-  on_attach = on_attach,
-  root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
-}
-
-lspconfig.tsserver.setup {
-  on_attach = on_attach,
-  root_dir = lspconfig.util.root_pattern "package.json",
-  single_file_support = false,
-}
-
+-- lspconfig.denols.setup {
+--   on_attach = on_attach,
+--   root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
+-- }
+--
+-- lspconfig.tsserver.setup {
+--   on_attach = on_attach,
+--   root_dir = lspconfig.util.root_pattern "package.json",
+--   single_file_support = false,
+-- }
+--
 lspconfig.biome.setup {
   on_attach = on_attach,
   root_dir = lspconfig.util.root_pattern "biome.json",
@@ -55,14 +56,14 @@ lspconfig.tailwindcss.setup {
     })
   end,
   settings = {
-    tailwindCSS = {
+    tailwindcss = {
       experimental = {
-        classRegex = {
+        classregex = {
           "tw`([^`]*)", -- tw`...`
           "tw='([^']*)", -- <div tw="..." />
           "tw={`([^`}]*)", -- <div tw={"..."} />
           "tw\\.\\w+`([^`]*)", -- tw.xxx`...`
-          "tw\\(.*?\\)`([^`]*)", -- tw(Component)`...`
+          "tw\\(.*?\\)`([^`]*)", -- tw(component)`...`
           "styled\\(.*?, '([^']*)'\\)",
           { "cn\\(([^)]*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)" },
         },
@@ -74,7 +75,7 @@ lspconfig.tailwindcss.setup {
 -- lspconfig.rust_analyzer.setup {
 --   settings = {
 --     ["rust-analyzer"] = {
---       checkOnSave = {
+--       checkonsave = {
 --         command = "clippy",
 --       },
 --     },
@@ -100,13 +101,13 @@ rt.setup {
       max_len_align_padding = 1,
       right_align = false,
       right_align_padding = 7,
-      highlight = "Comment",
+      highlight = "comment",
     },
     hover_actions = {
       border = "rounded",
     },
     on_initialized = function()
-      vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "CursorHold", "InsertLeave" }, {
+      vim.api.nvim_create_autocmd({ "bufwritepost", "bufenter", "cursorhold", "insertleave" }, {
         pattern = { "*.rs" },
         callback = function()
           local _, _ = pcall(vim.lsp.codelens.refresh)
@@ -120,18 +121,18 @@ rt.setup {
   server = {
     on_attach = function(client, bufnr)
       on_attach(client, bufnr)
-      vim.keymap.set("n", "K", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "k", rt.hover_actions.hover_actions, { buffer = bufnr })
     end,
     capabilities = capabilities,
     settings = {
       ["rust-analyzer"] = {
         cargo = {
-          allFeatures = true,
+          allfeatures = true,
         },
         lens = {
           enable = true,
         },
-        checkOnSave = {
+        checkonsave = {
           enable = true,
           command = "clippy",
         },

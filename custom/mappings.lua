@@ -20,6 +20,18 @@ M.delete = {
   },
 }
 
+M.lsp = {
+  n = {
+    ["<leader>fm"] = {
+
+      function()
+        require("conform").format()
+      end,
+      "format with conform",
+    },
+  },
+}
+
 M.general = {
   n = {
     [";"] = { ":", "enter command mode", opts = { nowait = true } },

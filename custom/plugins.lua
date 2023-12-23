@@ -33,6 +33,14 @@ local plugins = {
 
   -- override plugin configs
   {
+    "stevearc/conform.nvim",
+    event = "BufWritePre",
+    config = function()
+      require "custom.configs.conform"
+    end,
+  },
+
+  {
     "williamboman/mason.nvim",
     opts = overrides.mason,
   },
@@ -134,6 +142,12 @@ local plugins = {
       }
     end,
     lazy = false,
+  },
+
+  { "HiPhish/rainbow-delimiters.nvim", lazy = false },
+  {
+    "Exafunction/codeium.vim",
+    event = "BufEnter",
   },
 }
 
