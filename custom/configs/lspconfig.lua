@@ -7,7 +7,7 @@ local lspconfig = require "lspconfig"
 local servers = {
   "html",
   "cssls",
-  "tsserver",
+  -- "tsserver",
   "clangd",
   "rust_analyzer",
   "pyright",
@@ -35,7 +35,11 @@ end
 --   root_dir = lspconfig.util.root_pattern "package.json",
 --   single_file_support = false,
 -- }
---
+
+require("typescript-tools").setup {
+  on_attach = on_attach,
+}
+
 lspconfig.biome.setup {
   on_attach = on_attach,
   root_dir = lspconfig.util.root_pattern "biome.json",
@@ -47,6 +51,7 @@ local tw_highlight = require "tailwind-highlight"
 
 lspconfig.tailwindcss.setup {
   root_dir = lspconfig.util.root_pattern("tailwind.config.ts", "tailwind.config.js"),
+  -- on_attach = on_attach,
   on_attach = function(client, bufnr)
     -- rest of you config
     tw_highlight.setup(client, bufnr, {
@@ -56,9 +61,9 @@ lspconfig.tailwindcss.setup {
     })
   end,
   settings = {
-    tailwindcss = {
+    tailwindCSS = {
       experimental = {
-        classregex = {
+        classRegex = {
           "tw`([^`]*)", -- tw`...`
           "tw='([^']*)", -- <div tw="..." />
           "tw={`([^`}]*)", -- <div tw={"..."} />

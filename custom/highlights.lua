@@ -6,6 +6,7 @@ local M = {}
 
 ---@type Base46HLGroupsList
 M.override = {
+  IndentBlanklineContextStart = { bg = "NONE" },
   IndentBlanklineContextChar = { fg = "#E06C75" },
   CursorLine = { bg = "statusline_bg" },
   DiagnosticWarn = { bg = "lightbg" },

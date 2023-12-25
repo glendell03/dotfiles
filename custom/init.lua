@@ -28,7 +28,6 @@ vim.g.rainbow_delimiters = {
   },
 }
 
-
 -- local highlight = {
 --   "RainbowRed",
 --   "RainbowYellow",
