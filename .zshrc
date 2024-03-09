@@ -1,8 +1,10 @@
+# source ./antigen.zsh
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# antigen use oh-my-zsh
+# antigen bundle deno
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -78,8 +80,6 @@ plugins=(
   poetry
 )
 
-source $ZSH/oh-my-zsh.sh
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -106,10 +106,12 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias python="python3"
+# eval "$(starship init zsh)"
+alias python=/opt/homebrew/bin/python3
+alias pip="pip3"
 alias git-log="git log --graph --abbrev-commit --decorate  --first-parent"
 
-alias ls='exa --icons'
+alias ls='eza --icons'
 alias ll='ls -l --grid --git -@ --no-user --group-directories-first'
 alias la='ll -a'
 alias lt='ll --git-ignore -T --level=2'
@@ -118,21 +120,17 @@ alias lttt='ltt -T --level=4'
 
 # alias neovide='neovide.exe --wsl --multigrid'
 alias v='nvim'
+alias vd="neovide --frame buttonless"
+# alias lvim="/Users/dell/.local/bin/lvim"
 
-alias DL='/mnt/c/Users/dellb/Downloads'
+# alias DL='/mnt/c/Users/dellb/Downloads'
 # alias explorer="/mnt/c/Windows/explorer.exe"
 # alias code="/mnt/c/Users/dellb/AppData/Local/Programs/'Microsoft VS Code'/bin/code"
 
-eval "$(starship init zsh)"
+#fm6000 -r -de WSL2 -c "random" -g 10
+#alias clear='clear && fm6000 -r -de WSL2 -c "random" -g 10'
 
-export PATH="/home/glendell03/.local/bin:$PATH"
-export PATH="/home/glendell03/.local/share/neovim/bin:$PATH"
-export DENO_INSTALL="/home/glendell03/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
-
-fm6000 -r -de WSL2 -c "random" -g 10
-alias clear='clear && fm6000 -r -de WSL2 -c "random" -g 10'
-
+alias cargo-update="cargo install $(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"
 
 lg()
 {
@@ -146,16 +144,24 @@ lg()
     fi
 }
 
-eval "$(direnv hook zsh)"
+#eval "$(direnv hook zsh)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-
-# bun completions
-[ -s "/home/glendell03/.bun/_bun" ] && source "/home/glendell03/.bun/_bun"
-
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# bun completions
+[ -s "/Users/dell/.bun/_bun" ] && source "/Users/dell/.bun/_bun"
+
+# avm
+export PATH="$HOME/.avm/bin:$PATH"
+
+export PATH="$HOME/.config/yazi/bin:$PATH"
+
+export PATH="$HOME/.local/bin:$PATH"
+
+export HELIX_RUNTIME="$HOME/.config/helixEditor/runtime"

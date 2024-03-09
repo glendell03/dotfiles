@@ -1,3 +1,5 @@
+Include ~/.orbstack/ssh/config
+
 # Main Acc
 Host github.com-main github account
  HostName github.com
@@ -9,3 +11,18 @@ Host github.com-bt github account
  HostName github.com
  User git
  IdentityFile ~/.ssh/id_rsa_bt
+
+# Carsu
+Host github.com-carsu github account
+ HostName github.com
+ User git
+ IdentityFile ~/.ssh/id_rsa_carsu
+
+Host 159.203.46.222
+  User root
+  IdentityFile ~/.ssh/id_ed25519_renterd
+
+
+Host 142.93.144.8
+  User root
+  IdentityFile ~/.ssh/id_ed25519_aws_s3
