@@ -1,0 +1,88 @@
+# ===========================================
+#  DENO
+# ===========================================
+[language-server.deno-lsp]
+command = "deno"
+args = ["lsp"]
+environment = { DENO_FUTURE = "1" }
+
+[language-server.deno-lsp.config.deno]
+enable = true
+
+[[language]]
+name = "typescript"
+shebangs = ["deno"]
+roots = ["deno.json", "deno.jsonc"]
+file-types = ["ts"]
+language-servers = ["deno-lsp"]
+auto-format = true
+
+# ===========================================
+#  TYPESCRIPT
+# ===========================================
+
+[language-server.eslint]
+args = ["--stdio"] # should come by def with helix
+command = "vscode-eslint-language-server"
+
+[language-server.eslint.config]
+validate = "on" # I assume this enabled eslit to validate the file, which now shows me counts for errors, warnings, etc in helix
+experimental = { useFlatConfig = false } # not sure why this is here
+rulesCustomizations = []
+run = "onType"
+problems = { shortenToSingleLine = false }
+nodePath = "" # seems redundant, why do we need to override this, should get detected autom.
+
+[language-server.eslint.config.codeAction]
+[language-server.eslint.config.codeAction.disableRuleComment]
+enable = true
+location = "separateLine"
+
+[language-server.eslint.config.codeAction.showDocumentation]
+enable = true # why?
+
+[language-server.eslint.config.codeActionOnSave]
+enable = true
+mode = "fixAll"
+
+[language-server.eslint.config.workingDirectory]
+mode = "location" # do we need to override this?
+changeProcessCWD = true
+
+[language-server.typescript-language-server.config]
+documentFormatting = false # use eslint instead, do we have to override this ourselves? I think if eslint LSP is detected and enabled, this should be done automatically for us as generally everyone lets eslint take over linting+prettying, which uses prettier by default if detected by it
+
+[language-server.vtsls]
+args = ["--stdio"] # should come by def with helix
+command = "vtsls"
+
+# [[language]]
+# name = "typescript"
+# language-servers = ["vtsls", "eslint"] # shouldn't need to override this
+# roots = ["package-lock.json", "tsconfig.json", ".prettierrc.json"] # shouldn't need to override this
+# formatter = { command = 'prettier', args = ["--parser", "typescript"] }
+# auto-format = true
+
+[[language]]
+name = "tsx"
+language-servers = ["vtsls", "eslint"] # shouldn't need to override this
+roots = ["package-lock.json", "tsconfig.json", ".prettierrc.json"] # shouldn't need to override this!
+formatter = { command = 'prettier', args = ["--parser", "typescript"] }
+auto-format = true
+
+# ===========================================
+#  PRISMA
+# ===========================================
+[[language]]
+name = "prisma"
+file-types = ["prisma"]
+language-servers = ["prisma-language-server"]
+auto-format = true
+
+
+[language-server.gpt]
+command = "deno"
+args = ["run", "--allow-net","--allow-env", "https://raw.githubusercontent.com/sigmaSd/helix-gpt/0.34-deno/src/app.ts"]
+# environment = { HANDLER= "codeium" }
+# HANDLER can be set to openai/copilot/codeium
+environment = { HANDLER= "openai", OPENAI_API_KEY="" } # working but with rate limit of 5sec

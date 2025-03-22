@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
-config.font = wezterm.font("JetBrainsMono Nerd Font", {weight = "Bold"})
+config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "ExtraBold" })
 config.font_size = 16
 
 config.window_decorations = "RESIZE"
@@ -77,8 +77,7 @@ config.window_padding = {
 	bottom = 10,
 }
 
--- config.default_prog = { "/bin/zsh" }
-config.default_prog = { "/bin/zsh", "-c", "tmux a || tmux" }
-
+config.default_prog = { "/opt/homebrew/bin/fish", "-c", "tmux a || tmux" }
+-- config.default_prog = { "/bin/zsh", "-c", "tmux a || tmux" }
 
 return config
